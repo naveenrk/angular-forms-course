@@ -2,26 +2,34 @@
   <mat-card-title>Login</mat-card-title>
   <mat-card-content>
 
-    <form class="login-form data-form">
+    <form class="login-form data-form" #loginForm="ngForm">
 
-      <mat-form-field>
+      <mat-form-field appearance="outline">
 
-        <input matInput type="email" name="email"
-               placeholder="Email">
+        <input matInput required ngModel email #email="ngModel" type="email" name="email" placeholder="Email" minlength=3 maxlength=20 pattern="[a-z]+">
+        <mat-error *ngIf="email.errors?.required"> The email is mandatory</mat-error>
+        <mat-error *ngIf="email.errors?.minlength"> Your email must have {{email.errors?.minlength.requiredLength}} chars, but it has {{email.errors?.minlength.actualLength}}</mat-error>
+        <mat-error *ngIf="email.errors?.email">This is not a valid email</mat-error>
+        <mat-error *ngIf="email.errors?.pattern">This is not a valid email pattern</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+
+        <input matInput required ngModel #password="ngModel" type="password" name="password" placeholder="Password">
 
       </mat-form-field>
 
-      <mat-form-field>
-
-        <input matInput type="password" placeholder="Password">
-
-      </mat-form-field>
-
-      <button mat-raised-button color="primary">
+      <button mat-raised-button color="primary" (click)="login(loginForm)">
         Login
       </button>
 
     </form>
-
+<div class="form-val">
+  {{"Form " +loginForm.valid | json}}
+</div>
+<div class="form-val">
+  {{email.errors | json}}
+  <!-- {{password.errors | json}} -->
+</div>
   </mat-card-content>
 </mat-card>
